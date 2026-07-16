@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Hobbies · eunju kang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .hobby-hero {
+      padding: 90px 0 20px;
+      text-align: center;
+    }
+    .hobby-section {
+      padding: 40px 0 60px;
+    }
+    .category-label {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--text);
+      margin: 60px 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .category-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navRoot"></nav>
+
+  <section class="hobby-hero">
+    <div class="container">
+      <div class="hero-tag">hobbies</div>
+      <h1 style="font-family: var(--font-serif); font-size: clamp(32px, 5vw, 52px); font-weight: 400; margin: 0 0 16px;">
+        little <em style="color: var(--text-soft); font-style: italic;">joys</em>
+      </h1>
+      <p class="hero-sub">
+        요즘 좋아하는 것들, 소소한 순간들.
+      </p>
+    </div>
+  </section>
+
+  <section class="hobby-section">
+    <div class="container">
+      <div class="placeholder">
+        <strong>[여주인님 취향 · 카테고리 & 사진 자리]</strong><br />
+        카테고리 예시로 세 개 잡아뒀습니다. 원하시는 카테고리 (예: 요리 · 여행 · 독서 · 카페 · 산책 · 향 · 음악 · 인테리어) 를 알려주시면 그대로 바꿉니다.<br />
+        각 그리드 칸은 이미지 자리이며, 이미지 파일만 넘겨주시면 배치·업로드까지 처리하겠습니다.
+      </div>
+
+      <!-- ====== 카테고리 1 ====== -->
+      <div class="category-label">daily moments</div>
+      <div class="gallery-grid">
+        <div class="gallery-item">img · 01</div>
+        <div class="gallery-item">img · 02</div>
+        <div class="gallery-item">img · 03</div>
+        <div class="gallery-item">img · 04</div>
+      </div>
+
+      <!-- ====== 카테고리 2 ====== -->
+      <div class="category-label">what i'm reading</div>
+      <div class="gallery-grid">
+        <div class="gallery-item">book · 01</div>
+        <div class="gallery-item">book · 02</div>
+        <div class="gallery-item">book · 03</div>
+      </div>
+
+      <!-- ====== 카테고리 3 ====== -->
+      <div class="category-label">favorites</div>
+      <div class="gallery-grid">
+        <div class="gallery-item">fav · 01</div>
+        <div class="gallery-item">fav · 02</div>
+        <div class="gallery-item">fav · 03</div>
+        <div class="gallery-item">fav · 04</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">eunju kang</div>
+      <div>© 2026 · a quiet space</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { renderNav } from "./assets/nav.js";
+    renderNav();
+  </script>
+</body>
+</html>

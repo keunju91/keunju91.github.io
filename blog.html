@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Journal · eunju kang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .journal-hero {
+      padding: 90px 0 40px;
+      text-align: center;
+    }
+    .journal-section {
+      padding: 40px 0 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navRoot"></nav>
+
+  <section class="journal-hero">
+    <div class="container">
+      <div class="hero-tag">journal</div>
+      <h1 style="font-family: var(--font-serif); font-size: clamp(32px, 5vw, 52px); font-weight: 400; margin: 0 0 16px;">
+        thoughts &amp; <em style="color: var(--text-soft); font-style: italic;">moments</em>
+      </h1>
+      <p class="hero-sub">
+        가끔씩, 남기고 싶은 순간을 적어둡니다.
+      </p>
+    </div>
+  </section>
+
+  <section class="journal-section">
+    <div class="container">
+      <div class="placeholder">
+        <strong>[여주인님 첫 글 자리]</strong><br />
+        블로그 방식을 정하시면 (자체 · Substack · 나중 추가) 그에 맞춰 리스트가 채워집니다.<br />
+        지금은 예시 글 3개로 스타일만 보여드립니다.
+      </div>
+
+      <div class="post-list">
+        <article class="post-item">
+          <div class="post-date">Coming Soon · 2026</div>
+          <h3>첫 번째 글이 이곳에 들어갑니다</h3>
+          <p>여주인님의 첫 번째 이야기가 이 자리에 놓입니다. 짧은 단상이든, 긴 에세이든 어떤 형식이든 어울립니다.</p>
+          <a href="#" class="post-read-more">read more →</a>
+        </article>
+
+        <article class="post-item">
+          <div class="post-date">Coming Soon · 2026</div>
+          <h3>두 번째 글의 제목</h3>
+          <p>블로그 방식이 정해지면 이 리스트가 실제 글로 채워집니다. 마크다운으로 쓰시면 자동으로 이렇게 배치됩니다.</p>
+          <a href="#" class="post-read-more">read more →</a>
+        </article>
+
+        <article class="post-item">
+          <div class="post-date">Coming Soon · 2026</div>
+          <h3>세 번째 글의 제목</h3>
+          <p>가장 오래된 글이 아래에 오는 시간 역순 정렬. 카테고리·태그 필터도 나중에 붙일 수 있습니다.</p>
+          <a href="#" class="post-read-more">read more →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">eunju kang</div>
+      <div>© 2026 · a quiet space</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { renderNav } from "./assets/nav.js";
+    renderNav();
+  </script>
+</body>
+</html>

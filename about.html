@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>About · eunju kang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    .about-hero {
+      padding: 90px 0 40px;
+      text-align: center;
+    }
+    .about-body {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px 0 80px;
+      font-size: 17px;
+      line-height: 1.9;
+      color: var(--text);
+    }
+    .about-body p { margin: 0 0 22px; }
+    .about-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 22px;
+      color: var(--text-soft);
+      text-align: center;
+      padding: 40px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navRoot"></nav>
+
+  <section class="about-hero">
+    <div class="container">
+      <div class="profile-frame">E</div>
+      <div class="hero-tag">about</div>
+      <h1 style="font-family: var(--font-serif); font-size: clamp(32px, 5vw, 48px); font-weight: 400; margin: 0 0 8px;">
+        eunju <em style="color: var(--text-soft); font-style: italic;">kang</em>
+      </h1>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="about-body">
+        <div class="placeholder">
+          <strong>[여주인님 자기소개 자리]</strong><br />
+          "추후 추가 예정" 이라 해두신 그 문구가 여기 들어갑니다.<br />
+          한 단락이든 여러 단락이든 원하시는 만큼 자유롭게 채워주세요.
+        </div>
+
+        <p style="color: var(--text-soft); font-style: italic; text-align: center; margin-top: 40px;">
+          이 자리에 들어갈 이야기를 준비 중이에요.
+        </p>
+
+        <div class="about-quote">
+          "quiet moments,<br />gentle days"
+        </div>
+
+        <div class="placeholder">
+          <strong>[취향 / 좋아하는 것 목록 자리 · 선택]</strong><br />
+          예: 좋아하는 향, 지금 읽는 책, 요즘 자주 듣는 노래, 즐겨찾는 공간 등을 리스트로 넣어도 좋습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">eunju kang</div>
+      <div>© 2026 · a quiet space</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { renderNav } from "./assets/nav.js";
+    renderNav();
+  </script>
+</body>
+</html>
