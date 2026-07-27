@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Mahjong · eunju's quiet space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <style>
+    .mj-hero {
+      padding: 90px 0 40px;
+      text-align: center;
+    }
+    .mj-hero h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(34px, 5.5vw, 54px);
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 12px;
+    }
+    .mj-hero h1 em {
+      font-style: italic;
+      color: var(--text-soft);
+    }
+    .mj-section {
+      padding: 20px 0 60px;
+    }
+    .picker-group {
+      max-width: 720px;
+      margin: 40px auto 0;
+    }
+    .picker-label {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      color: var(--text);
+      margin: 32px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .pick {
+      background: var(--cream-soft);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .pick:hover {
+      border-color: var(--rose);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .pick.selected {
+      background: var(--rose-soft);
+      border-color: var(--rose);
+    }
+    .pick.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .pick-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .pick-desc {
+      font-size: 13px;
+      color: var(--text-soft);
+      line-height: 1.5;
+    }
+    .pick-badge {
+      display: inline-block;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: var(--beige);
+      color: var(--text-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-top: 10px;
+    }
+    .pick-badge.ready { background: var(--sage-soft); color: #4a6b56; }
+    .pick-badge.soon { background: var(--beige); color: var(--text-soft); }
+    .start-row {
+      text-align: center;
+      margin-top: 48px;
+    }
+    .start-btn {
+      display: inline-block;
+      padding: 16px 44px;
+      background: var(--text);
+      color: var(--cream);
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .start-btn:hover { background: #2a2622; }
+    .start-btn:disabled {
+      background: var(--line);
+      color: var(--text-soft);
+      cursor: not-allowed;
+    }
+    .tile-preview {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 42px;
+      letter-spacing: 6px;
+      color: var(--text);
+    }
+    .status-hint {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navRoot"></nav>
+
+  <section class="mj-hero">
+    <div class="container">
+      <div class="hero-tag">a small game</div>
+      <h1>mahjong <em>corner</em></h1>
+      <p class="hero-sub">
+        중국 마작 · 상황에 따라 룰과 모드를 골라 편안하게.
+      </p>
+    </div>
+  </section>
+
+  <section class="mj-section">
+    <div class="container">
+      <div class="picker-group">
+
+        <div class="picker-label">Rule · 룰 선택</div>
+        <div class="picker-grid" id="rulePick">
+          <div class="pick" data-value="sichuan">
+            <div class="pick-title">사천마작</div>
+            <div class="pick-desc">四川血战到底 · 만·통·삭 3종 · 한 종 缺 · 血战 방식으로 끝까지</div>
+            <span class="pick-badge ready">Phase 1 · Ready</span>
+          </div>
+          <div class="pick disabled" data-value="guobiao">
+            <div class="pick-title">국표마작</div>
+            <div class="pick-desc">国标麻将 · 만·통·삭·자·화 전종 · 81 fan 채점</div>
+            <span class="pick-badge soon">Phase 2 · Coming</span>
+          </div>
+        </div>
+
+        <div class="picker-label">Mode · 플레이 방식</div>
+        <div class="picker-grid" id="modePick">
+          <div class="pick" data-value="ai">
+            <div class="pick-title">vs AI 3명</div>
+            <div class="pick-desc">혼자 · 나머지 3명은 컴퓨터. 언제든 편하게.</div>
+            <span class="pick-badge ready">Phase 1 · Ready</span>
+          </div>
+          <div class="pick disabled" data-value="local">
+            <div class="pick-title">한 화면 4명</div>
+            <div class="pick-desc">Pass-and-play · 같은 화면에서 4명이 순번대로.</div>
+            <span class="pick-badge soon">Phase 3 · Coming</span>
+          </div>
+          <div class="pick disabled" data-value="online">
+            <div class="pick-title">온라인 4명</div>
+            <div class="pick-desc">방 만들어서 각자 접속. 서버 세팅 이후.</div>
+            <span class="pick-badge soon">Phase 4 · Coming</span>
+          </div>
+        </div>
+
+        <div class="tile-preview" id="tilePreview">🀇 🀙 🀐 🀄︎ 🀅 🀆</div>
+        <div class="status-hint">패 표시가 위처럼 보이면 유니코드 마작 폰트 정상. 안 보이면 이미지 렌더로 대체 예정.</div>
+
+        <div class="start-row">
+          <button class="start-btn" id="startBtn" disabled>select rule + mode</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-brand">eunju kang</div>
+      <div>© 2026 · mahjong corner · phase 1 scaffold</div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { renderNav } from "../assets/nav.js";
+    renderNav();
+
+    // ─── 룰·모드 선택 상태 ───
+    const state = { rule: null, mode: null };
+
+    function bindPicker(rootId, key) {
+      const root = document.getElementById(rootId);
+      root.addEventListener('click', (e) => {
+        const btn = e.target.closest('.pick');
+        if (!btn || btn.classList.contains('disabled')) return;
+        root.querySelectorAll('.pick').forEach(p => p.classList.remove('selected'));
+        btn.classList.add('selected');
+        state[key] = btn.dataset.value;
+        updateStartBtn();
+      });
+    }
+
+    function updateStartBtn() {
+      const btn = document.getElementById('startBtn');
+      if (state.rule && state.mode) {
+        btn.disabled = false;
+        btn.textContent = `start · ${state.rule} · ${state.mode}`;
+      } else {
+        btn.disabled = true;
+        btn.textContent = 'select rule + mode';
+      }
+    }
+
+    bindPicker('rulePick', 'rule');
+    bindPicker('modePick', 'mode');
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+      const params = new URLSearchParams(state);
+      location.href = `play.html?${params.toString()}`;
+    });
+  </script>
+</body>
+</html>

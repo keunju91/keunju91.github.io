@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Mahjong · Play · eunju's space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <style>
+    body { background: #EEE7DA; }
+    .play-shell { padding: 40px 20px 80px; max-width: 960px; margin: 0 auto; }
+    .play-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 18px; border-bottom: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+    .play-title {
+      font-family: var(--font-serif);
+      font-size: 22px; color: var(--text);
+      display: flex; gap: 12px; align-items: baseline;
+    }
+    .play-title em { font-style: italic; color: var(--text-soft); font-size: 15px; }
+    .back-link {
+      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-soft); border-bottom: 1px solid var(--rose); padding-bottom: 2px;
+    }
+    .stage {
+      background: var(--cream-soft); border-radius: var(--radius);
+      padding: 32px 28px; border: 1px solid var(--line);
+    }
+    .stage h2 {
+      font-family: var(--font-serif); font-weight: 500;
+      color: var(--text); margin: 0 0 18px; font-size: 20px;
+    }
+    .tile-strip {
+      font-size: 42px; letter-spacing: 6px;
+      padding: 20px 0; text-align: center;
+      background: var(--beige); border-radius: 10px;
+      color: var(--text);
+    }
+    .config-block {
+      background: var(--rose-soft); border: 1px dashed var(--rose);
+      border-radius: 10px; padding: 18px 22px; margin-top: 24px;
+      color: #7a4a4a; font-size: 14px; line-height: 1.7;
+    }
+    .config-block strong { color: #5a3535; }
+    .todo-list {
+      margin: 18px 0 0; padding: 0 0 0 20px; font-size: 13px;
+      color: var(--text-soft); line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="play-shell">
+    <div class="play-header">
+      <div class="play-title">
+        Mahjong <em>· <span id="ruleLabel">?</span> · <span id="modeLabel">?</span></em>
+      </div>
+      <a href="./" class="back-link">← back</a>
+    </div>
+
+    <div class="stage">
+      <h2>Phase 1 · 스캐폴딩 준비 중</h2>
+      <div class="tile-strip">🀇 🀈 🀉 🀊 🀋 🀌 🀍 🀎 🀏</div>
+
+      <div class="config-block">
+        <strong>선택된 세팅</strong><br />
+        Rule: <span id="ruleCode">-</span> · Mode: <span id="modeCode">-</span><br />
+        진입 URL 파라미터로 넘어옴 (예: <code>?rule=sichuan&amp;mode=ai</code>)
+      </div>
+
+      <h2 style="margin-top:36px">앞으로 붙일 조각들</h2>
+      <ul class="todo-list">
+        <li>사천마작 규칙 엔진 (rules-sichuan.js) — 缺一门 · 血战到底 · 화형 판정</li>
+        <li>게임 엔진 (engine.js) — 산 셔플 · 발패 · 뽑기/버리기 순환 · 펑/치/강/후 처리</li>
+        <li>AI 플레이어 (ai-player.js) — 룰 지키는 기본 봇</li>
+        <li>게임 화면 UI (game-view.js) — 손패 그리드 · 버리기 영역 · 상대 뒷면</li>
+        <li>페이지 상단 상태 (몇 국 몇 판 · 남은 패 · 점수)</li>
+        <li>승리 판정 후 결과 화면</li>
+      </ul>
+    </div>
+  </div>
+
+  <script type="module">
+    const params = new URLSearchParams(location.search);
+    const rule = params.get('rule') || '-';
+    const mode = params.get('mode') || '-';
+    const RULE_KO = { sichuan: '사천마작', guobiao: '국표마작' };
+    const MODE_KO = { ai: 'vs AI', local: '로컬 4인', online: '온라인 4인' };
+    document.getElementById('ruleLabel').textContent = RULE_KO[rule] || rule;
+    document.getElementById('modeLabel').textContent = MODE_KO[mode] || mode;
+    document.getElementById('ruleCode').textContent = rule;
+    document.getElementById('modeCode').textContent = mode;
+
+    // 로딩 확인용 · Phase 1 산 셔플 데모
+    import('./assets/core/tile.js').then(({ buildSichuanWall, shuffle, unicodeSymbol }) => {
+      const wall = shuffle(buildSichuanWall());
+      console.log('shuffled wall (first 14):', wall.slice(0, 14).map(unicodeSymbol).join(' '));
+    });
+  </script>
+</body>
+</html>

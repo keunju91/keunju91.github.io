@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { file: "about",   label: "About" },
   { file: "blog",    label: "Blog" },
   { file: "hobbies", label: "Hobbies" },
+  { file: "mahjong", label: "Mahjong", href: "mahjong/" },
 ];
 
 // 현재 페이지 파일명 (예: "index", "about", "blog", "hobbies")
@@ -18,8 +19,9 @@ function currentKey() {
   return last.replace(/\.html$/, "") || "index";
 }
 
-function href(file) {
-  return file === "index" ? "./" : `${file}.html`;
+function href(item) {
+  if (item.href) return item.href;
+  return item.file === "index" ? "./" : `${item.file}.html`;
 }
 
 export function renderNav(rootId = "navRoot", brand = "eunju kang") {
@@ -27,9 +29,9 @@ export function renderNav(rootId = "navRoot", brand = "eunju kang") {
   if (!root) return;
 
   const key = currentKey();
-  const links = NAV_ITEMS.map(({ file, label }) => {
-    const active = file === key ? " active" : "";
-    return `<a href="${href(file)}" class="${active.trim()}">${label}</a>`;
+  const links = NAV_ITEMS.map((item) => {
+    const active = item.file === key || location.pathname.includes(`/${item.file}/`) ? " active" : "";
+    return `<a href="${href(item)}" class="${active.trim()}">${item.label}</a>`;
   }).join("");
 
   root.innerHTML = `
