@@ -10,98 +10,126 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link rel="stylesheet" href="../assets/style.css" />
-  <style>
-    body { background: #EEE7DA; }
-    .play-shell { padding: 40px 20px 80px; max-width: 960px; margin: 0 auto; }
-    .play-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding-bottom: 18px; border-bottom: 1px solid var(--line);
-      margin-bottom: 28px;
-    }
-    .play-title {
-      font-family: var(--font-serif);
-      font-size: 22px; color: var(--text);
-      display: flex; gap: 12px; align-items: baseline;
-    }
-    .play-title em { font-style: italic; color: var(--text-soft); font-size: 15px; }
-    .back-link {
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--text-soft); border-bottom: 1px solid var(--rose); padding-bottom: 2px;
-    }
-    .stage {
-      background: var(--cream-soft); border-radius: var(--radius);
-      padding: 32px 28px; border: 1px solid var(--line);
-    }
-    .stage h2 {
-      font-family: var(--font-serif); font-weight: 500;
-      color: var(--text); margin: 0 0 18px; font-size: 20px;
-    }
-    .tile-strip {
-      font-size: 42px; letter-spacing: 6px;
-      padding: 20px 0; text-align: center;
-      background: var(--beige); border-radius: 10px;
-      color: var(--text);
-    }
-    .config-block {
-      background: var(--rose-soft); border: 1px dashed var(--rose);
-      border-radius: 10px; padding: 18px 22px; margin-top: 24px;
-      color: #7a4a4a; font-size: 14px; line-height: 1.7;
-    }
-    .config-block strong { color: #5a3535; }
-    .todo-list {
-      margin: 18px 0 0; padding: 0 0 0 20px; font-size: 13px;
-      color: var(--text-soft); line-height: 1.8;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/ui/game-style.css" />
 </head>
-<body>
+<body style="background: #EEE7DA;">
 
-  <div class="play-shell">
-    <div class="play-header">
+  <div class="mj-shell">
+    <div class="mj-header">
       <div class="play-title">
         Mahjong <em>· <span id="ruleLabel">?</span> · <span id="modeLabel">?</span></em>
       </div>
-      <a href="./" class="back-link">← back</a>
+      <a href="./" class="back-link" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--text-soft); border-bottom:1px solid var(--rose); padding-bottom:2px;">← back</a>
     </div>
 
-    <div class="stage">
-      <h2>Phase 1 · 스캐폴딩 준비 중</h2>
-      <div class="tile-strip">🀇 🀈 🀉 🀊 🀋 🀌 🀍 🀎 🀏</div>
-
-      <div class="config-block">
-        <strong>선택된 세팅</strong><br />
-        Rule: <span id="ruleCode">-</span> · Mode: <span id="modeCode">-</span><br />
-        진입 URL 파라미터로 넘어옴 (예: <code>?rule=sichuan&amp;mode=ai</code>)
-      </div>
-
-      <h2 style="margin-top:36px">앞으로 붙일 조각들</h2>
-      <ul class="todo-list">
-        <li>사천마작 규칙 엔진 (rules-sichuan.js) — 缺一门 · 血战到底 · 화형 판정</li>
-        <li>게임 엔진 (engine.js) — 산 셔플 · 발패 · 뽑기/버리기 순환 · 펑/치/강/후 처리</li>
-        <li>AI 플레이어 (ai-player.js) — 룰 지키는 기본 봇</li>
-        <li>게임 화면 UI (game-view.js) — 손패 그리드 · 버리기 영역 · 상대 뒷면</li>
-        <li>페이지 상단 상태 (몇 국 몇 판 · 남은 패 · 점수)</li>
-        <li>승리 판정 후 결과 화면</li>
-      </ul>
-    </div>
+    <div id="gameRoot"></div>
   </div>
 
   <script type="module">
+    import { unicodeSymbol, displayName, sortTiles } from './assets/core/tile.js';
+    import { Game } from './assets/core/engine.js';
+    import { AIPlayer } from './assets/players/ai-player.js';
+    import { HumanPlayer } from './assets/players/human-player.js';
+    import { GameView } from './assets/ui/game-view.js';
+
     const params = new URLSearchParams(location.search);
-    const rule = params.get('rule') || '-';
-    const mode = params.get('mode') || '-';
+    const rule = params.get('rule') || 'sichuan';
+    const mode = params.get('mode') || 'ai';
     const RULE_KO = { sichuan: '사천마작', guobiao: '국표마작' };
     const MODE_KO = { ai: 'vs AI', local: '로컬 4인', online: '온라인 4인' };
     document.getElementById('ruleLabel').textContent = RULE_KO[rule] || rule;
     document.getElementById('modeLabel').textContent = MODE_KO[mode] || mode;
-    document.getElementById('ruleCode').textContent = rule;
-    document.getElementById('modeCode').textContent = mode;
 
-    // 로딩 확인용 · Phase 1 산 셔플 데모
-    import('./assets/core/tile.js').then(({ buildSichuanWall, shuffle, unicodeSymbol }) => {
-      const wall = shuffle(buildSichuanWall());
-      console.log('shuffled wall (first 14):', wall.slice(0, 14).map(unicodeSymbol).join(' '));
-    });
+    if (rule !== 'sichuan' || mode !== 'ai') {
+      document.getElementById('gameRoot').innerHTML =
+        `<div style="padding:60px 20px; text-align:center; color:var(--text-soft);">
+          <h2 style="font-family:var(--font-serif); color:var(--text);">아직 준비 중</h2>
+          <p>${RULE_KO[rule] || rule} · ${MODE_KO[mode] || mode} 조합은 다음 Phase 에서 붙습니다.</p>
+          <p style="margin-top:24px;"><a href="./" style="color:var(--rose);">← 사천마작 vs AI 로 돌아가기</a></p>
+        </div>`;
+    } else {
+      startGame();
+    }
+
+    async function startGame() {
+      const view = new GameView(document.getElementById('gameRoot'));
+      view.setMySeat(0);
+
+      const human = new HumanPlayer('나', 0, {
+        askMissingSuit: (s) => view.askMissingSuit(),
+        askDiscard:     (s, hand) => { view.setMyHand(hand); view.render(s); return view.askDiscard(); },
+        askClaim:       (s, t, a) => view.askClaim(s, t, a),
+        askSelfHu:      (s, t) => view.askSelfHu(s, t),
+      });
+      const ai1 = new AIPlayer('AI-1', 1);
+      const ai2 = new AIPlayer('AI-2', 2);
+      const ai3 = new AIPlayer('AI-3', 3);
+
+      const game = new Game({
+        rule,
+        players: [human, ai1, ai2, ai3],
+        onEvent: (ev) => {
+          if (ev.type === 'deal' && ev.seat === 0) {
+            view.setMyHand(human.hand);
+          }
+          if (ev.type === 'draw') {
+            if (ev.seat === 0) view.setMyHand(human.hand);
+            view.render(game.snapshot());
+          }
+          if (ev.type === 'discard') {
+            const name = game.players[ev.seat].name;
+            view.log(`<b>${name}</b> 버림: ${displayName(ev.tile)} <small style="color:var(--text-soft)">(산 ${game.wall.length})</small>`);
+            if (ev.seat === 0) view.setMyHand(human.hand);
+            view.render(game.snapshot());
+          }
+          if (ev.type === 'missing-chosen') {
+            const p = game.players[ev.seat];
+            const kor = { m: '만수', p: '통수', s: '삭수' }[ev.suit] || ev.suit;
+            view.log(`${p.name}: 缺 ${kor} 선택`);
+          }
+          if (ev.type === 'hu') {
+            showResult(ev, game.players);
+          }
+          if (ev.type === 'draw-game') {
+            view.log('🟡 유국 (산 소진)');
+          }
+        },
+      });
+
+      try {
+        await game.run();
+      } catch (e) {
+        console.error(e);
+        view.log(`<span style="color:#c33">에러: ${e.message}</span>`);
+      }
+    }
+
+    function showResult(res, players) {
+      const winner = players[res.winnerSeat];
+      const loser = res.loserSeat !== null ? players[res.loserSeat] : null;
+      const overlay = document.createElement('div');
+      overlay.className = 'mj-result-overlay';
+      overlay.innerHTML = `
+        <div class="mj-result-card">
+          <h2>${winner.name} 후!</h2>
+          <div style="color:var(--text-soft); font-size:14px;">
+            ${res.type === 'zimo' ? '자모후' : '点炮 · ' + (loser?.name || '')}
+          </div>
+          <div class="mj-hand-view">
+            ${sortTiles(res.hand).map(t => unicodeSymbol(t)).join(' ')}
+          </div>
+          <div class="mj-fan">${res.fan} fan</div>
+          <div class="mj-tags">
+            ${res.tags.map(t => `<span class="mj-tag">${t}</span>`).join('')}
+          </div>
+          <div style="color:var(--text-soft); font-size:14px;">
+            점수: ${res.points}
+          </div>
+          <button onclick="location.reload()">다시 시작</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
   </script>
 </body>
 </html>

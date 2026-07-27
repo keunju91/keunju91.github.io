@@ -1,0 +1,186 @@
+/* ============================================================================
+   Mahjong Game 화면 스타일 · 여주인 홈페이지 톤 유지 (cream + rose)
+   ========================================================================== */
+
+.mj-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 16px 60px;
+}
+
+.mj-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+.mj-header .play-title {
+  font-family: var(--font-serif);
+  font-size: 20px; color: var(--text);
+  display: flex; gap: 10px; align-items: baseline;
+}
+.mj-header .play-title em { font-style: italic; color: var(--text-soft); font-size: 14px; }
+
+.mj-topbar {
+  display: flex; gap: 20px; justify-content: center;
+  padding: 12px 20px; background: var(--cream-soft);
+  border: 1px solid var(--line); border-radius: 10px;
+  margin-bottom: 24px;
+  font-size: 13px; letter-spacing: 0.1em;
+  color: var(--text-soft);
+}
+.mj-stat { padding: 2px 12px; }
+.mj-stat + .mj-stat { border-left: 1px solid var(--line); }
+
+.mj-table {
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    ".      top     ."
+    "left  center  right"
+    ".      bottom  .";
+  gap: 12px;
+  background: linear-gradient(135deg, #d9c9a9 0%, #c9b590 100%);
+  border-radius: var(--radius);
+  padding: 16px;
+  min-height: 620px;
+  box-shadow: inset 0 0 40px rgba(80, 60, 30, 0.15);
+}
+
+.mj-seat { background: rgba(255, 250, 240, 0.6); border-radius: 10px; padding: 10px; }
+.mj-seat-top    { grid-area: top; }
+.mj-seat-left   { grid-area: left;   writing-mode: vertical-rl; }
+.mj-seat-right  { grid-area: right;  writing-mode: vertical-rl; transform: rotate(180deg); }
+.mj-seat-bottom { grid-area: bottom; background: rgba(255, 250, 240, 0.85); }
+.mj-center      { grid-area: center; background: rgba(255, 248, 235, 0.4);
+                   border-radius: 10px; padding: 20px; display: flex;
+                   flex-direction: column; align-items: center; justify-content: center; }
+
+.mj-name {
+  font-family: var(--font-serif); font-size: 14px; color: var(--text);
+  margin-bottom: 6px; letter-spacing: 0.04em;
+}
+.mj-missing {
+  display: inline-block; padding: 1px 8px; margin-left: 4px;
+  background: var(--rose-soft); color: #7a4444;
+  border-radius: 999px; font-size: 11px; font-family: var(--font-sans);
+}
+.mj-hand { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 8px; }
+.mj-hand-my { justify-content: center; }
+.mj-hand-back { }
+
+.mj-tile {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 24px; padding: 2px 4px;
+  background: #fefaf3; border: 1px solid #b8a377;
+  border-radius: 4px;
+  font-size: 22px; line-height: 1;
+  color: var(--text);
+  cursor: default;
+}
+.mj-tile-my {
+  font-size: 32px; min-width: 32px; padding: 6px 4px 4px;
+  background: #fffef8;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.mj-tile-my:hover {
+  transform: translateY(-6px);
+  border-color: var(--rose); background: var(--rose-soft);
+}
+.mj-tile-back {
+  background: #7a5a3a; color: #d9c9a9; border-color: #5a4028;
+}
+.mj-tile-small { font-size: 16px; min-width: 18px; padding: 1px 2px; }
+.mj-tile-recent {
+  font-size: 22px; margin: 2px;
+  background: #fffef4; border-color: #b8a377;
+}
+
+.mj-discards {
+  display: flex; flex-wrap: wrap; gap: 2px; opacity: 0.7;
+  max-width: 100%; margin-top: 4px;
+}
+
+.mj-center-label {
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-soft); margin-bottom: 8px;
+  writing-mode: horizontal-tb;
+}
+.mj-center-tiles { display: flex; flex-wrap: wrap; gap: 4px; max-width: 320px;
+                   justify-content: center; writing-mode: horizontal-tb; }
+
+.mj-actions {
+  display: flex; gap: 10px; justify-content: center;
+  margin-top: 20px; flex-wrap: wrap;
+  min-height: 44px;
+}
+.mj-action-btn {
+  padding: 10px 24px; border-radius: 999px;
+  background: var(--text); color: var(--cream);
+  font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+  font-family: inherit; font-weight: 500;
+  border: none; cursor: pointer;
+  transition: background 0.15s;
+}
+.mj-action-btn:hover { background: #2a2622; }
+.mj-action-btn:nth-child(2) {
+  background: var(--cream); color: var(--text);
+  border: 1px solid var(--text);
+}
+.mj-action-btn:nth-child(2):hover { background: var(--rose-soft); }
+
+.mj-log {
+  margin-top: 24px; padding: 16px 20px;
+  background: var(--cream-soft); border: 1px solid var(--line);
+  border-radius: 10px; max-height: 220px; overflow-y: auto;
+  font-size: 13px; line-height: 1.7; color: var(--text);
+}
+.mj-log-line {
+  padding: 2px 0; border-bottom: 1px dashed var(--line);
+}
+.mj-log-line:last-child { border-bottom: none; }
+
+.mj-result-overlay {
+  position: fixed; inset: 0; background: rgba(30, 25, 22, 0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+}
+.mj-result-card {
+  background: var(--cream);
+  border-radius: var(--radius-lg);
+  padding: 40px 48px; max-width: 480px; text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.mj-result-card h2 {
+  font-family: var(--font-serif); font-size: 32px; font-weight: 400;
+  color: var(--text); margin: 0 0 12px;
+}
+.mj-result-card .mj-tags {
+  margin: 20px 0;
+}
+.mj-result-card .mj-tag {
+  display: inline-block; padding: 5px 14px; margin: 3px;
+  background: var(--rose-soft); color: #6a3535;
+  border-radius: 999px; font-size: 13px;
+}
+.mj-result-card .mj-hand-view {
+  font-size: 32px; letter-spacing: 4px;
+  margin: 20px 0; color: var(--text);
+}
+.mj-result-card .mj-fan {
+  font-size: 48px; font-family: var(--font-serif);
+  color: var(--rose); margin: 10px 0;
+}
+.mj-result-card button {
+  margin-top: 20px; padding: 12px 32px;
+  background: var(--text); color: var(--cream);
+  border: none; border-radius: 999px; cursor: pointer;
+  font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+}
+
+@media (max-width: 720px) {
+  .mj-table { grid-template-columns: 60px 1fr 60px; min-height: 520px; }
+  .mj-tile-my { font-size: 24px; }
+  .mj-tile { font-size: 16px; }
+}
