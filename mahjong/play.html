@@ -69,9 +69,11 @@
         rule,
         players: [human, ai1, ai2, ai3],
         onEvent: (ev) => {
-          if (ev.type === 'deal' && ev.seat === 0) {
-            view.setMyHand(human.hand);
+          if (ev.type === 'deal') {
+            if (ev.seat === 0) view.setMyHand(human.hand);
+            if (ev.seat === 3) view.render(game.snapshot()); // 4명 다 발패 후 최초 렌더
           }
+          if (ev.type === 'missing-chosen') view.render(game.snapshot());
           if (ev.type === 'draw') {
             if (ev.seat === 0) view.setMyHand(human.hand);
             view.render(game.snapshot());
@@ -85,7 +87,7 @@
           if (ev.type === 'missing-chosen') {
             const p = game.players[ev.seat];
             const kor = { m: '만수', p: '통수', s: '삭수' }[ev.suit] || ev.suit;
-            view.log(`${p.name}: 缺 ${kor} 선택`);
+            view.log(`${p.name}: 缺 <b>${kor}</b> 선택`);
           }
           if (ev.type === 'hu') {
             showResult(ev, game.players);
