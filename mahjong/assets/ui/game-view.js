@@ -284,8 +284,8 @@ export class GameView {
 
   // ═══════════════ 사용자 입력 브리지 ═══════════════
 
-  askMissingSuit(_state, timeoutMs = 15000) {
-    this.log('👉 <b>缺 종을 선택하세요</b> · 15초');
+  askMissingSuit(_state, timeoutMs = 25000) {
+    this.log('👉 <b>缺 종을 선택하세요</b> · 25초');
     this._startCountdown(timeoutMs);
     return this._askWithButtons([
       { label: '缺 만수', value: 'm' },
@@ -294,8 +294,8 @@ export class GameView {
     ]).finally(() => this._stopCountdown());
   }
 
-  askDiscard(_state, _hand, timeoutMs = 15000) {
-    this.log('👉 <b>버릴 패를 탭</b>하세요 · 15초');
+  askDiscard(_state, _hand, timeoutMs = 25000) {
+    this.log('👉 <b>버릴 패를 탭</b>하세요 · 25초');
     this._startCountdown(timeoutMs);
     return new Promise(resolve => {
       this._askType = 'discard';
@@ -303,7 +303,7 @@ export class GameView {
     });
   }
 
-  askClaim(_state, tile, actions, timeoutMs = 15000) {
+  askClaim(_state, tile, actions, timeoutMs = 25000) {
     if (actions.includes('hu')) {
       this.log(`🀄 <b>후 가능!</b> ${displayName(tile)} 로 화형 완성`);
       this._startCountdown(timeoutMs);
@@ -315,7 +315,7 @@ export class GameView {
     return Promise.resolve({ action: 'pass' });
   }
 
-  askSelfHu(_state, tile, timeoutMs = 15000) {
+  askSelfHu(_state, tile, timeoutMs = 25000) {
     this.log(`🀄 <b>자모후 가능!</b> ${displayName(tile)} 뽑음`);
     this._startCountdown(timeoutMs);
     return this._askWithButtons([

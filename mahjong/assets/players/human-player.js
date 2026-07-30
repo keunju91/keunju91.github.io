@@ -12,7 +12,7 @@ export class HumanPlayer extends Player {
   constructor(name, seat, uiBridge, options = {}) {
     super(name, seat);
     this.ui = uiBridge;
-    this.timeoutMs = options.timeoutMs ?? 15000;
+    this.timeoutMs = options.timeoutMs ?? 25000;
     // 내부 AI 는 hand 를 공유해서 fallback 결정에 사용
     this._ai = new AIPlayer(name, seat);
   }
