@@ -56,6 +56,10 @@
       const view = new GameView(document.getElementById('gameRoot'));
       view.setMySeat(0);
 
+      // 🎲 주사위 굴려서 시작 자리 결정 (시각적 요소)
+      const dice = await view.showDiceRoll();
+      view.log(`🎲 주사위 ${dice.a}+${dice.b}=${dice.total} · <b>${['東','南','西','北'][dice.startSeat]}</b> 부터 시작`);
+
       const human = new HumanPlayer('나', 0, {
         askMissingSuit: (s) => view.askMissingSuit(),
         askDiscard:     (s, hand) => { view.setMyHand(hand); view.render(s); return view.askDiscard(); },
@@ -119,7 +123,7 @@
             ${res.type === 'zimo' ? '자모후' : '点炮 · ' + (loser?.name || '')}
           </div>
           <div class="mj-hand-view">
-            ${sortTiles(res.hand).map(t => unicodeSymbol(t)).join(' ')}
+            ${sortTiles(res.hand).map(t => `<span class="mj-tile-recent" data-suit="${t.suit}" data-num="${t.num}">${unicodeSymbol(t)}</span>`).join('')}
           </div>
           <div class="mj-fan">${res.fan} fan</div>
           <div class="mj-tags">
