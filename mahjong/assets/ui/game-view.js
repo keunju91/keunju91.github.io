@@ -21,7 +21,45 @@ export class GameView {
     this._askResolver = null;
     this._askType = null;
     this._myHand = [];
+    this._countdownInterval = null;
+    this._countdownActive = false;
     this._buildShell();
+  }
+
+  // 카운트다운 시작 (컴퍼스 안 숫자를 초로 갱신)
+  _startCountdown(ms) {
+    this._stopCountdown();
+    this._countdownActive = true;
+    const end = Date.now() + ms;
+    const numEl = document.getElementById('mjCompassNum');
+    const compassEl = document.getElementById('mjCompass');
+    compassEl?.classList.add('countdown-active');
+    const tick = () => {
+      const remain = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+      if (numEl) numEl.textContent = String(remain).padStart(2, '0');
+      if (remain <= 3) compassEl?.classList.add('countdown-danger');
+      else compassEl?.classList.remove('countdown-danger');
+      if (remain <= 0) this._stopCountdown();
+    };
+    tick();
+    this._countdownInterval = setInterval(tick, 200);
+  }
+  _stopCountdown() {
+    if (this._countdownInterval) clearInterval(this._countdownInterval);
+    this._countdownInterval = null;
+    this._countdownActive = false;
+    const compassEl = document.getElementById('mjCompass');
+    compassEl?.classList.remove('countdown-active');
+    compassEl?.classList.remove('countdown-danger');
+    // 컴퍼스 안 숫자는 render 다음에 남은 산 수로 복구됨
+  }
+  // HumanPlayer 가 timeout 되었을 때 UI 상태 정리
+  cancelAsk() {
+    this._stopCountdown();
+    this._askResolver = null;
+    this._askType = null;
+    const actions = document.getElementById('mjActions');
+    if (actions) actions.innerHTML = '';
   }
 
   setMySeat(seat) { this.mySeat = seat; }
@@ -73,9 +111,12 @@ export class GameView {
     document.getElementById('mjTurn').textContent =
       `차례: ${SEAT_LABEL[state.turnSeat]}·${state.players[state.turnSeat].name}`;
 
-    // 다이아몬드 컴퍼스: 현재 차례 방향 표시 + 카운트 (남은 산의 마지막 두 자리 형태)
+    // 다이아몬드 컴퍼스: 현재 차례 방향 표시
     document.getElementById('mjCompassDir').textContent = SEAT_LABEL[state.turnSeat];
-    document.getElementById('mjCompassNum').textContent = String(state.wallLeft).padStart(2, '0');
+    // 카운트다운 중이 아니면 남은 산 수 표시
+    if (!this._countdownActive) {
+      document.getElementById('mjCompassNum').textContent = String(state.wallLeft).padStart(2, '0');
+    }
 
     // 자리 매핑 (내 시점)
     for (const p of state.players) {
@@ -243,40 +284,44 @@ export class GameView {
 
   // ═══════════════ 사용자 입력 브리지 ═══════════════
 
-  askMissingSuit() {
-    this.log('👉 <b>缺 종을 선택하세요</b> · 손패에 없는 종을 고르는 게 유리');
+  askMissingSuit(_state, timeoutMs = 15000) {
+    this.log('👉 <b>缺 종을 선택하세요</b> · 15초');
+    this._startCountdown(timeoutMs);
     return this._askWithButtons([
       { label: '缺 만수', value: 'm' },
       { label: '缺 통수', value: 'p' },
       { label: '缺 삭수', value: 's' },
-    ]);
+    ]).finally(() => this._stopCountdown());
   }
 
-  askDiscard() {
-    this.log('👉 <b>버릴 패를 탭</b>하세요');
+  askDiscard(_state, _hand, timeoutMs = 15000) {
+    this.log('👉 <b>버릴 패를 탭</b>하세요 · 15초');
+    this._startCountdown(timeoutMs);
     return new Promise(resolve => {
       this._askType = 'discard';
       this._askResolver = resolve;
     });
   }
 
-  askClaim(_state, tile, actions) {
+  askClaim(_state, tile, actions, timeoutMs = 15000) {
     if (actions.includes('hu')) {
       this.log(`🀄 <b>후 가능!</b> ${displayName(tile)} 로 화형 완성`);
+      this._startCountdown(timeoutMs);
       return this._askWithButtons([
         { label: '후!', value: { action: 'hu' } },
         { label: '패스', value: { action: 'pass' } },
-      ]);
+      ]).finally(() => this._stopCountdown());
     }
     return Promise.resolve({ action: 'pass' });
   }
 
-  askSelfHu(_state, tile) {
+  askSelfHu(_state, tile, timeoutMs = 15000) {
     this.log(`🀄 <b>자모후 가능!</b> ${displayName(tile)} 뽑음`);
+    this._startCountdown(timeoutMs);
     return this._askWithButtons([
       { label: '자모후!', value: true },
       { label: '계속', value: false },
-    ]);
+    ]).finally(() => this._stopCountdown());
   }
 
   _askWithButtons(buttons) {
@@ -299,6 +344,7 @@ export class GameView {
     if (this._askType === 'discard' && this._askResolver) {
       const tile = this._myHand.find(t => t.id === id);
       const resolver = this._askResolver;
+      this._stopCountdown();
       this._askResolver = null;
       this._askType = null;
       resolver(tile);
