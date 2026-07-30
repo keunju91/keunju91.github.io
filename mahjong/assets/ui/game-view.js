@@ -40,14 +40,18 @@ export class GameView {
         <div class="mj-seat mj-seat-left"   id="seat-left"></div>
         <div class="mj-seat mj-seat-right"  id="seat-right"></div>
         <div class="mj-center" id="mjCenter">
-          <div class="mj-compass" id="mjCompass">
-            <div class="mj-compass-dir dir-N" data-dir="N">北</div>
-            <div class="mj-compass-dir dir-E" data-dir="E">東</div>
-            <div class="mj-compass-dir dir-S" data-dir="S">南</div>
-            <div class="mj-compass-dir dir-W" data-dir="W">西</div>
+          <div class="mj-title-cn">血战到底</div>
+          <div class="mj-info-row">
+            <div class="mj-info-chip">剩<span class="num" id="mjWallNum">108</span>张</div>
+            <div class="mj-compass" id="mjCompass">
+              <div class="mj-compass-inner">
+                <div class="mj-compass-value" id="mjCompassNum">-</div>
+                <div class="mj-compass-dir-label" id="mjCompassDir">東</div>
+              </div>
+            </div>
+            <div class="mj-info-chip">第<span class="num" id="mjRoundNum">1</span>局</div>
           </div>
-          <div class="mj-round-label" id="mjRoundLabel">Round · 1국</div>
-          <div class="mj-wall-label" id="mjWallLabel">산 108</div>
+          <div class="mj-round-label">四川血战到底</div>
           <div class="mj-center-tiles" id="mjCenterTiles"></div>
         </div>
         <div class="mj-seat mj-seat-bottom" id="seat-bottom"></div>
@@ -65,15 +69,13 @@ export class GameView {
   render(state) {
     this.state = state;
     document.getElementById('mjWall').textContent = `산 ${state.wallLeft}`;
-    document.getElementById('mjWallLabel').textContent = `산 ${state.wallLeft}`;
+    document.getElementById('mjWallNum').textContent = state.wallLeft;
     document.getElementById('mjTurn').textContent =
       `차례: ${SEAT_LABEL[state.turnSeat]}·${state.players[state.turnSeat].name}`;
 
-    // 컴퍼스 (東南西北) 활성화
-    const DIR_MAP = ['E', 'S', 'W', 'N']; // seat 0=東, 1=南, 2=西, 3=北
-    document.querySelectorAll('.mj-compass-dir').forEach(el => el.classList.remove('active'));
-    const activeDir = DIR_MAP[state.turnSeat];
-    document.querySelector(`.mj-compass-dir.dir-${activeDir}`)?.classList.add('active');
+    // 다이아몬드 컴퍼스: 현재 차례 방향 표시 + 카운트 (남은 산의 마지막 두 자리 형태)
+    document.getElementById('mjCompassDir').textContent = SEAT_LABEL[state.turnSeat];
+    document.getElementById('mjCompassNum').textContent = String(state.wallLeft).padStart(2, '0');
 
     // 자리 매핑 (내 시점)
     for (const p of state.players) {
